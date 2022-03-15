@@ -1,9 +1,7 @@
-import express from "express";
+import "./database";
+import "./setup";
+import { app } from "./app";
 
-const app = express();
-
-app.use(express.json());
-
-app.listen(5000, () => {
+app.listen(process.env.PORT, () => {
   console.log("servidor rodando...");
 });
