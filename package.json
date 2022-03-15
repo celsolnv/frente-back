@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "NODE_ENV=development ts-node-dev ./src/server.ts",
-    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
+    "typeorm": "NODE_ENV=development ts-node-dev ./node_modules/typeorm/cli.js",
     "build": "NODE_ENV=production npx tsc --outDir dist && npx typeorm migration:run",
     "start": "NODE_ENV=production NODE_TLS_REJECT_UNAUTHORIZED=0 node dist/server.js"
   },
@@ -17,7 +17,8 @@
     "http-status": "^1.5.0",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.38"
+    "typeorm": "^0.2.38",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
