@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
+import { PasswordNotMatch } from "../errors/PasswordNotMatch";
 import { UserAlreadyExists } from "../errors/UserAlreadyExists";
+import { UserDoesNotExists } from "../errors/UserDoesNotExist";
 
 // eslint-disable-next-line consistent-return
 export function errorHandlingMiddleware(
@@ -12,6 +14,16 @@ export function errorHandlingMiddleware(
   console.log("Entramos no error");
   if (err instanceof UserAlreadyExists) {
     return res.status(409).send({
+      message: err.message,
+    });
+  }
+  if (err instanceof UserDoesNotExists) {
+    return res.status(404).send({
+      message: err.message,
+    });
+  }
+  if (err instanceof PasswordNotMatch) {
+    return res.status(401).send({
       message: err.message,
     });
   }
