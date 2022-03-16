@@ -22,4 +22,8 @@ export async function login(req: Request, res: Response) {
   if (validate.error) {
     return res.status(400).send({ message: validate.error.message });
   }
+
+  const token = await userService.login({ email, password });
+
+  return res.send({ token });
 }
