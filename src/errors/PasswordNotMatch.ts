@@ -1,6 +1,6 @@
 export class PasswordNotMatch extends Error {
   constructor() {
-    super("Password not match!");
+    super("Email or password incorrect!");
 
     this.name = "PasswordNotMatch";
 
