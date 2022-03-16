@@ -1,9 +1,9 @@
 import DateExtension from "@joi/date";
-import JoiImport from "joi";
+import joi from "joi";
 
-const Joi = JoiImport.extend(DateExtension);
+const Joi = joi.extend(DateExtension);
 
-export const createUserSchema = Joi.object({
+export const createUser = Joi.object({
   name: Joi.string().min(5).required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
@@ -19,4 +19,8 @@ export const createUserSchema = Joi.object({
   district: Joi.string().required(),
   street: Joi.string().required(),
   identification_number: Joi.string().required(),
+});
+export const login = joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
 });

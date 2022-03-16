@@ -1,8 +1,13 @@
+import { hash, compare } from "bcrypt";
+import jwt from "jsonwebtoken";
 import { getCustomRepository } from "typeorm";
 
+import { PasswordNotMatch } from "../errors/PasswordNotMatch";
 import { UserAlreadyExists } from "../errors/UserAlreadyExists";
+import { UserDoesNotExists } from "../errors/UserDoesNotExist";
 import { AddressRepository } from "../repositories/AddressRepository";
 import { UserRepository } from "../repositories/UserRepository";
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export interface ICreateUserData {
   name: string;
@@ -39,15 +44,39 @@ export async function createUser(data: ICreateUserData) {
 
   await addressRepository.save(address);
 
+  const passwordHash = await hash(data.password, 8);
   const user = userRepository.create({
     name: data.name,
     address,
     cpf: data.cpf,
     birdDate: data.bird_date,
     email: data.email,
-    password: data.password,
+    password: passwordHash,
   });
   await userRepository.save(user);
 
   return user;
+}
+
+interface ILogin {
+  email: string;
+  password: string;
+}
+export async function login({ email, password }: ILogin) {
+  const userRepository = getCustomRepository(UserRepository);
+  const userExist = await userRepository.findOne({ where: { email } });
+
+  if (!userExist) {
+    throw new UserDoesNotExists();
+  }
+
+  const passwordMatch = await compare(password, userExist.password);
+
+  if (!passwordMatch) {
+    throw new PasswordNotMatch();
+  }
+
+  const token = jwt.sign({ id: userExist.id }, process.env.JWT_SECRET);
+
+  return token;
 }
