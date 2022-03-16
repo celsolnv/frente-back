@@ -22,7 +22,7 @@ export class Address {
   street: string;
 
   @Column()
-  identification_number: number;
+  identification_number: string;
 
   constructor() {
     if (!this.id) {
