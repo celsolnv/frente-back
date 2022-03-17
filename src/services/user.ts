@@ -81,10 +81,6 @@ export async function login({ email, password }: ILogin) {
 
   const token = jwt.sign({ id: userExist.id }, process.env.JWT_SECRET);
 
-  console.log(userExist.id);
-  console.log(userExist.id);
-  console.log(userExist.id);
-
   return token;
 }
 

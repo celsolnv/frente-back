@@ -35,9 +35,7 @@ export class User {
   address: Address;
 
   constructor() {
-    console.log(this.id);
     if (!this.id) {
-      console.log("Gerando novo id");
       this.id = uuid();
     }
   }
