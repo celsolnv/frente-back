@@ -12,7 +12,7 @@ import { Address } from "./Address";
 
 @Entity("users")
 export class User {
-  @PrimaryColumn()
+  @PrimaryColumn("uuid")
   readonly id: string;
 
   @Column()
@@ -21,7 +21,7 @@ export class User {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column()
@@ -35,7 +35,9 @@ export class User {
   address: Address;
 
   constructor() {
+    console.log(this.id);
     if (!this.id) {
+      console.log("Gerando novo id");
       this.id = uuid();
     }
   }

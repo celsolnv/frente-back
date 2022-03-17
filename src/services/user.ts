@@ -64,7 +64,10 @@ interface ILogin {
 }
 export async function login({ email, password }: ILogin) {
   const userRepository = getCustomRepository(UserRepository);
-  const userExist = await userRepository.findOne({ where: { email } });
+  const userExist = await userRepository.findOne({
+    where: { email },
+    select: ["id", "email", "password"],
+  });
 
   if (!userExist) {
     throw new UserDoesNotExists();
@@ -78,5 +81,31 @@ export async function login({ email, password }: ILogin) {
 
   const token = jwt.sign({ id: userExist.id }, process.env.JWT_SECRET);
 
+  console.log(userExist.id);
+  console.log(userExist.id);
+  console.log(userExist.id);
+
   return token;
+}
+
+export async function getUser(id: string) {
+  const userRepository = getCustomRepository(UserRepository);
+
+  const user = await userRepository.findOne(id);
+
+  if (!user) {
+    throw new UserDoesNotExists();
+  }
+
+  return user;
+}
+
+export async function getUsers() {
+  const userRepository = getCustomRepository(UserRepository);
+
+  const user = await userRepository.find({
+    relations: ["address"],
+  });
+
+  return user;
 }

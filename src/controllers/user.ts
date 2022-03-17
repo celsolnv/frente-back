@@ -27,3 +27,21 @@ export async function login(req: Request, res: Response) {
 
   return res.send({ token });
 }
+
+export async function getUser(req: Request, res: Response) {
+  const { id } = req.params;
+
+  const user = await userService.getUser(id);
+
+  res.send(user);
+}
+
+export async function getUsers(req: Request, res: Response) {
+  const users = await userService.getUsers();
+
+  if (users.length === 0) {
+    return res.status(404).send({ message: "Users not found" });
+  }
+
+  return res.send(users);
+}
