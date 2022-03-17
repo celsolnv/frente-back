@@ -8,7 +8,6 @@ import { UserDoesNotExists } from "../errors/UserDoesNotExist";
 import { AddressRepository } from "../repositories/AddressRepository";
 import { UserRepository } from "../repositories/UserRepository";
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export interface ICreateUserData {
   name: string;
   email: string;
@@ -23,7 +22,6 @@ export interface ICreateUserData {
   street: string;
   identification_number: string;
 }
-
 export async function createUser(data: ICreateUserData) {
   const userRepository = getCustomRepository(UserRepository);
   const addressRepository = getCustomRepository(AddressRepository);
@@ -62,7 +60,7 @@ interface ILogin {
   email: string;
   password: string;
 }
-export async function login({ email, password }: ILogin) {
+export async function login({ email, password }: ILogin): Promise<string> {
   const userRepository = getCustomRepository(UserRepository);
   const userExist = await userRepository.findOne({
     where: { email },
@@ -104,4 +102,18 @@ export async function getUsers() {
   });
 
   return user;
+}
+
+export async function deleteUser(id: string) {
+  const userRepository = getCustomRepository(UserRepository);
+
+  const user = await userRepository.findOne(id);
+
+  if (!user) {
+    throw new UserDoesNotExists();
+  }
+
+  await userRepository.delete({ id });
+
+  return true;
 }

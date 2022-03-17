@@ -11,7 +11,6 @@ export function errorHandlingMiddleware(
   res: Response,
   _next: NextFunction
 ) {
-  console.log("Entramos no error");
   if (err instanceof UserAlreadyExists) {
     return res.status(409).send({
       message: err.message,

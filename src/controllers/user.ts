@@ -5,12 +5,14 @@ import * as userService from "../services/user";
 
 export async function createUser(req: Request, res: Response) {
   const data: userService.ICreateUserData = req.body;
-  data.cpf = data.cpf.replace(/[./-]/, "");
-  data.cep = data.cep.replace(/[-]/, "");
+  data.cpf = data.cpf.replace(/[^\d]+/g, "");
+  data.cep = data.cep.replace(/[^\d]+/g, "");
+
   const validate = userSchema.createUser.validate(data);
   if (validate.error) {
     return res.status(400).send({ message: validate.error.message });
   }
+
   const user = await userService.createUser(data);
   return res.status(201).send(user);
 }
@@ -44,4 +46,15 @@ export async function getUsers(req: Request, res: Response) {
   }
 
   return res.send(users);
+}
+
+export async function deleteUser(req: Request, res: Response) {
+  const { id } = req.params;
+
+  const isDeleted = await userService.deleteUser(id);
+
+  if (isDeleted) {
+    return res.sendStatus(204);
+  }
+  return res.status(418).send({ message: "Not possible delete user" });
 }
